@@ -1,90 +1,47 @@
 import userModel from "../../models/users.model.js";
 export default class UserManager {
-  constructor() {}
+  post = async (user) => {
+    let result = userModel.create(user);
+    return result;
+  };
 
-  async post(user) {
-    try {
-      return await userModel.create(user);
-    } catch (error) {
-      return {
-        status: 500,
-        error: "An error occurred while creating the user",
-      };
-    }
-  }
+  getAll = async () => {
+    let result = userModel.find();
+    return result;
+  };
 
-  async getAll() {
-    try {
-      if (query) query = JSON.parse(query);
-      return await userModel.find().lean();
-    } catch (error) {
-      return {
-        status: 500,
-        error:
-          "An error has occurred at moment of read the database, this error is from server and we're working on resolve the problem.",
-      };
-    }
-  }
+  getOne = async (search) => {
+    let result = userModel.findOne(search);
+    return result;
+  };
 
-  async getBy(param) {
-    try {
-      const user = await userModel.findOne(param).lean();
-      return user;
-    } catch (error) {
-      return {
-        status: 500,
-        error: `An error occurred while obtaining the user`,
-      };
-    }
-  }
+  editOne = async (email, user) => {
+    let result = userModel.updateOne({ email }, user);
+    return result;
+  };
 
-  async put(id, object) {
-    try {
-      const productUpdated = await userModel.findByIdAndUpdate(id, object, {
-        new: true,
-      });
-      return productUpdated === null
-        ? {
-            status: 404,
-            error: `Product with id ${id} not found`,
-          }
-        : productUpdated;
-    } catch (error) {
-      return {
-        status: 500,
-        error: `An error occurred while updating the product with id ${id}`,
-      };
-    }
-  }
+  editLastConnection = async (user, lastConnection) => {
+    user.last_connection = lastConnection;
 
-  async deleteById(id) {
-    try {
-      const productDeleted = await userModel.findByIdAndDelete(id);
-      return productDeleted === null
-        ? {
-            status: 404,
-            error: `Product with id ${id} not found`,
-          }
-        : { status: 200, message: `Product with ${id} deleted succesfully` };
-    } catch (error) {
-      return {
-        status: 500,
-        error: `An error occurred while updating the product with id ${id}`,
-      };
-    }
-  }
+    let result = await userModel.updateOne({ email: user.email }, user);
 
-  async editLastConnection(user, lastConnection) {
-    try {
-      user.last_connection = lastConnection;
-      let result = await userModel.updateOne({ email: user.email }, user);
+    return result;
+  };
 
-      return result;
-    } catch (error) {
-      return {
-        status: 500,
-        error: `An error occurred while updating the conection`,
-      };
-    }
-  }
+  deleteMany = async (users) => {
+    let wentWrong = [];
+
+    users.forEach(async (user) => {
+      let result = await userModel.deleteOne({ email: user });
+      console.log(result);
+      if (!result.acknowledged) wentWrong.push(user);
+    });
+
+    return wentWrong;
+  };
+
+  deleteOne = async (email) => {
+    let result = userModel.deleteOne({ email });
+    return result;
+  };
 }

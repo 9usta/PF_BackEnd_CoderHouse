@@ -7,19 +7,7 @@ export default class UsersRepository {
     return await this.dao.post(user);
   }
 
-  async getAll() {
-    return await this.dao.getAll();
-  }
-
-  async getBy(param) {
-    return await this.dao.getBy(param);
-  }
-
-  async putBy(id, object) {
-    return await this.dao.putBy(id, object);
-  }
-
-  async deleteById(id) {
-    return await this.dao.deleteById(id);
-  }
+  async getOne(search) {
+    return await this.dao.getOne(search);
+}
 }

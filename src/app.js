@@ -17,6 +17,8 @@ import FileStore from "session-file-store";
 import MongoStore from "connect-mongo";
 import sessionRouter from "./routes/session.router.js";
 import sessionViewRouter from "./routes/sessionView.router.js";
+import usersRouter from "./routes/users.router.js";
+import usersViewRouter from "./routes/loggerView.router.js";
 import loggerViewRouter from "./routes/loggerView.router.js";
 import passport from "passport";
 import initPassport from "./config/passport.config.js";
@@ -92,11 +94,13 @@ app.use('/apidocs', swaggerUiExpress.serve, swaggerUiExpress.setup(specs));
 app.use("/api/products", productsRouter);
 app.use("/api/cart", cartsRouter);
 app.use("/api/session", sessionRouter);
+app.use("/api/users", usersRouter);
 app.use("/messages", messagesRouter);
 app.use("/products", productsViewRouter);
 app.use("/cart", cartsViewRouter);
 app.use("/session", sessionViewRouter);
 app.use("/loggerTest", loggerViewRouter);
+app.use("/users", usersViewRouter);
 
 const messageManager = new MessageManager();
 
